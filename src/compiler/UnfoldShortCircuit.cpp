@@ -29,10 +29,12 @@ void UnfoldShortCircuit::traverse(TIntermNode *node)
 
 bool UnfoldShortCircuit::visitBinary(Visit visit, TIntermBinary *node)
 {
+#ifdef SYS_WINDOWS
     TInfoSinkBase &out = mOutputHLSL->getBodyStream();
-
+#endif
     switch (node->getOp())
     {
+#ifdef SYS_WINDOWS
       case EOpLogicalOr:
         // "x || y" is equivalent to "x ? true : y", which unfolds to "bool s; if(x) s = true; else s = y;",
         // and then further simplifies down to "bool s = x; if(!s) s = y;".
@@ -95,6 +97,7 @@ bool UnfoldShortCircuit::visitBinary(Visit visit, TIntermBinary *node)
             mTemporaryIndex = i + 1;
         }
         return false;
+#endif
       default:
         return true;
     }
@@ -102,6 +105,7 @@ bool UnfoldShortCircuit::visitBinary(Visit visit, TIntermBinary *node)
 
 bool UnfoldShortCircuit::visitSelection(Visit visit, TIntermSelection *node)
 {
+#ifdef SYS_WINDOWS
     TInfoSinkBase &out = mOutputHLSL->getBodyStream();
 
     // Unfold "b ? x : y" into "type s; if(b) s = x; else s = y;"
@@ -141,7 +145,7 @@ bool UnfoldShortCircuit::visitSelection(Visit visit, TIntermSelection *node)
 
         mTemporaryIndex = i + 1;
     }
-
+#endif
     return false;
 }
 

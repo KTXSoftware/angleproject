@@ -9,6 +9,8 @@
 #include "compiler/InitializeParseContext.h"
 #include "compiler/OutputHLSL.h"
 
+#ifdef SYS_WINDOWS
+
 TranslatorHLSL::TranslatorHLSL(ShShaderType type, ShShaderSpec spec, ShShaderOutput output)
     : TCompiler(type, spec), mOutputType(output)
 {
@@ -22,3 +24,5 @@ void TranslatorHLSL::translate(TIntermNode *root)
     outputHLSL.output();
     mActiveUniforms = outputHLSL.getUniforms();
 }
+
+#endif

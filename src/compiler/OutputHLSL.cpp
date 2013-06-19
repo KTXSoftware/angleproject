@@ -17,6 +17,8 @@
 #include <cfloat>
 #include <stdio.h>
 
+#ifdef SYS_WINDOWS
+
 namespace sh
 {
 // Integer to TString conversion
@@ -3248,3 +3250,5 @@ GLenum OutputHLSL::glVariablePrecision(const TType &type)
 }
 
 }
+
+#endif

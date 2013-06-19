@@ -8,11 +8,13 @@
 
 #include "common/debug.h"
 #include "common/system.h"
+#ifdef SYS_WINDOWS
 #include <d3d9.h>
+#endif
 
 namespace gl
 {
-
+#ifdef SYS_WINDOWS
 typedef void (WINAPI *PerfOutputFunction)(D3DCOLOR, LPCWSTR);
 
 static void output(bool traceFileDebugOnly, PerfOutputFunction perfFunc, const char *format, va_list vararg)
@@ -55,15 +57,17 @@ static void output(bool traceFileDebugOnly, PerfOutputFunction perfFunc, const c
     }
 #endif
 }
-
+#endif
 void trace(bool traceFileDebugOnly, const char *format, ...)
 {
     va_list vararg;
     va_start(vararg, format);
+#ifdef SYS_WINDOWS
 #if defined(ANGLE_DISABLE_PERF)
     output(traceFileDebugOnly, NULL, format, vararg);
 #else
     output(traceFileDebugOnly, D3DPERF_SetMarker, format, vararg);
+#endif
 #endif
     va_end(vararg);
 }
