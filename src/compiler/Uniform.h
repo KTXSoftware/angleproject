@@ -10,7 +10,11 @@
 #include <string>
 #include <vector>
 
+#ifdef SYS_WINDOWS
+#define GL_APICALL __declspec(dllimport)
+#else
 #define GL_APICALL
+#endif
 #include <GLES2/gl2.h>
 
 namespace sh
