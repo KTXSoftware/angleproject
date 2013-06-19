@@ -82,7 +82,8 @@ typedef enum {
   SH_GLSL_OUTPUT   = 0x8B46,
   SH_HLSL_OUTPUT   = 0x8B47,
   SH_HLSL9_OUTPUT  = 0x8B47,
-  SH_HLSL11_OUTPUT = 0x8B48
+  SH_HLSL11_OUTPUT = 0x8B48,
+  SH_AGAL_OUTPUT   = 0x8B49
 } ShShaderOutput;
 
 typedef enum {
