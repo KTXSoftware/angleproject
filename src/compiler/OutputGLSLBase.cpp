@@ -71,13 +71,19 @@ void TOutputGLSLBase::writeTriplet(Visit visit, const char* preStr, const char* 
     }
 }
 
+extern bool glsl14;
+
 void TOutputGLSLBase::writeVariableType(const TType& type)
 {
     TInfoSinkBase& out = objSink();
     TQualifier qualifier = type.getQualifier();
     // TODO(alokp): Validate qualifier for variable declarations.
-    if ((qualifier != EvqTemporary) && (qualifier != EvqGlobal))
-        out << type.getQualifierString() << " ";
+    if ((qualifier != EvqTemporary) && (qualifier != EvqGlobal)) {
+        if (glsl14 && qualifier == EvqAttribute) out << "in ";
+        else if (glsl14 && qualifier == EvqVaryingOut) out << "out ";
+        else if (glsl14 && qualifier == EvqVaryingIn) out << "in ";
+        else out << type.getQualifierString() << " ";
+    }
     // Declare the struct if we have not done so already.
     if ((type.getBasicType() == EbtStruct) &&
         (mDeclaredStructs.find(type.getTypeName()) == mDeclaredStructs.end()))
@@ -176,9 +182,10 @@ void TOutputGLSLBase::visitSymbol(TIntermSymbol* node)
     TInfoSinkBase& out = objSink();
     if (mLoopUnroll.NeedsToReplaceSymbolWithValue(node))
         out << mLoopUnroll.GetLoopIndexValue(node);
-    else
-        out << hashVariableName(node->getSymbol());
-
+    else {
+        if (glsl14 && hashVariableName(node->getSymbol()) == "gl_FragColor") out << "kore_FragColor";
+        else out << hashVariableName(node->getSymbol());
+    }
     if (mDeclaringVariables && node->getType().isArray())
         out << arrayBrackets(node->getType());
 }

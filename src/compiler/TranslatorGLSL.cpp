@@ -9,6 +9,8 @@
 #include "compiler/OutputGLSL.h"
 #include "compiler/VersionGLSL.h"
 
+extern bool glsl14;
+
 static void writeVersion(ShShaderType type, TIntermNode* root,
                          TInfoSinkBase& sink) {
     TVersionGLSL versionGLSL(type);
@@ -16,9 +18,11 @@ static void writeVersion(ShShaderType type, TIntermNode* root,
     int version = versionGLSL.getVersion();
     // We need to write version directive only if it is greater than 110.
     // If there is no version directive in the shader, 110 is implied.
-    if (version > 110) {
-        sink << "#version " << version << "\n";
-    }
+
+    if (glsl14) sink << "#version 140 \n";
+    else sink << "#version " << version << "\n";
+
+    if (glsl14 && type == SH_FRAGMENT_SHADER) sink << "out vec4 kore_FragColor;\n";
 }
 
 TranslatorGLSL::TranslatorGLSL(ShShaderType type, ShShaderSpec spec)
