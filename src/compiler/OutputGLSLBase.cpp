@@ -542,7 +542,8 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate* node)
             // Function call.
             if (visit == PreVisit)
             {
-                out << hashFunctionName(node->getName()) << "(";
+                if (glsl14 && hashFunctionName(node->getName()) == "texture2D") out << "texture(";
+                else out << hashFunctionName(node->getName()) << "(";
             }
             else if (visit == InVisit)
             {
