@@ -8,6 +8,7 @@
 
 #include "common/debug.h"
 #include "common/system.h"
+#include <stdarg.h>
 #ifdef SYS_WINDOWS
 #include <d3d9.h>
 #endif
